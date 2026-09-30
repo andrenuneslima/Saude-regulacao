@@ -88,6 +88,21 @@
     toastTimer = setTimeout(function () { el.classList.remove("show"); }, 3200);
   }
 
+  // Confirmação dentro da página (sem depender de window.confirm)
+  function confirmar(msg, rotulo, onOk) {
+    var box = document.createElement("div");
+    box.className = "modal-backdrop";
+    box.innerHTML = '<div class="modal" role="alertdialog" aria-modal="true"><p>' + esc(msg) + "</p>" +
+      '<div class="actions"><button class="btn danger" type="button" data-ok>' + esc(rotulo) + "</button>" +
+      '<button class="btn secondary" type="button" data-cancel>Cancelar</button></div></div>';
+    function fechar() { box.remove(); }
+    box.querySelector("[data-ok]").addEventListener("click", function () { fechar(); onOk(); });
+    box.querySelector("[data-cancel]").addEventListener("click", fechar);
+    box.addEventListener("click", function (ev) { if (ev.target === box) fechar(); });
+    document.body.appendChild(box);
+    box.querySelector("[data-cancel]").focus();
+  }
+
   var app = document.getElementById("app");
 
   function notice() {
@@ -522,10 +537,11 @@
       box.querySelectorAll("[data-del]").forEach(function (b) {
         b.addEventListener("click", function () {
           var i = Number(b.getAttribute("data-del"));
-          if (!confirm("Remover " + esp.especialistas[i].nome + " de " + esp.nome + "?")) return;
-          esp.especialistas.splice(i, 1);
-          save(); resetForm(); renderLista();
-          toast("Especialista removido.");
+          confirmar("Remover " + esp.especialistas[i].nome + " de " + esp.nome + "?", "Remover", function () {
+            esp.especialistas.splice(i, 1);
+            save(); resetForm(); renderLista();
+            toast("Especialista removido.");
+          });
         });
       });
     }
@@ -604,11 +620,12 @@
       reader.readAsText(file);
     });
     document.getElementById("btnReset").addEventListener("click", function () {
-      if (!confirm("Descartar todas as atualizações feitas neste navegador e voltar aos dados base?")) return;
-      state = baseState();
-      try { localStorage.removeItem(STORE_KEY); } catch (e) { /* ignora */ }
-      renderNav(); renderLastUpdate();
-      toast("Dados base restaurados.");
+      confirmar("Descartar todas as atualizações feitas neste navegador e voltar aos dados base?", "Restaurar", function () {
+        state = baseState();
+        try { localStorage.removeItem(STORE_KEY); } catch (e) { /* ignora */ }
+        renderNav(); renderLastUpdate();
+        toast("Dados base restaurados.");
+      });
     });
   }
 
