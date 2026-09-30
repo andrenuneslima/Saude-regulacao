@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Portal da Regulação - Prefeitura de Goiana</title>
+  <meta name="description" content="Consulta da fila de espera por especialidade, localidades, especialistas e horários de atendimento da Secretaria de Saúde de Goiana-PE.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b3c7a'/><path d='M13 7h6v6h6v6h-6v6h-6v-6H7v-6h6z' fill='%23f2b705'/></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <a href="#/" class="brand">
+      <span class="brand-mark" aria-hidden="true">+</span>
+      <span class="brand-text">
+        <strong>Portal da Regulação</strong>
+        <small>Prefeitura de Goiana · Secretaria de Saúde</small>
+      </span>
+    </a>
+    <span class="updated" id="lastUpdate"></span>
+  </header>
+
+  <div class="layout">
+    <nav class="sidebar" id="sidebar" aria-label="Menu principal">
+      <a href="#/" data-nav="home">Painel geral</a>
+      <a href="#/atualizar" data-nav="atualizar">Atualizar cadastro</a>
+      <a href="#/historico" data-nav="historico">Histórico de atualizações</a>
+      <div class="nav-title">Especialidades</div>
+      <div id="navEspecialidades"></div>
+    </nav>
+
+    <main class="content" id="app" tabindex="-1"></main>
+  </div>
+
+  <footer class="footer">
+    Prefeitura Municipal de Goiana – PE · Secretaria Municipal de Saúde · Central de Regulação
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
