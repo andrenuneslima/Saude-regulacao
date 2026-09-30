@@ -1,195 +1,301 @@
 /*
- * Dados base do Portal da Regulação.
+ * Dados base do Portal da Regulação — Prefeitura de Goiana.
  *
- * ATENÇÃO: os valores abaixo são DADOS DE EXEMPLO. Substitua pela
- * "Lista de especialidades" oficial (Ofício 432) antes da publicação.
+ * Fonte: "Rede própria de Especialidades médicas ofertados pelo município de
+ * Goiana e que podem ser agendados / inseridos no SISREG" (Lista de
+ * especialidades).
  *
- * Estrutura:
- *   LOCALIDADES  -> bairros/distritos de origem dos pacientes
- *   ESPECIALIDADES[].fila[localidade] = [urgente, prioritario, eletivo]
- *   ESPECIALIDADES[].especialistas    = profissionais, local e horário
+ * Campos de cada serviço:
+ *   categoria   "consulta" | "exame"
+ *   locais      códigos de UNIDADES
+ *   idade       faixa etária atendida
+ *   medicos     [{ nome, dias, obs }]
+ *   oferta      quantidade média ofertada por mês (null = não informada, "---")
+ *   fila        pacientes na fila de espera
+ *   tempoMedio  tempo médio para agendamento, em dias (null = não informado)
  */
 window.PORTAL_DATA = {
   versao: "2026-09-30",
-  exemplo: true,
+  fonte: "Lista de especialidades — rede própria do município de Goiana (SISREG)",
 
-  LOCALIDADES: [
-    "Centro",
-    "Nova Goiana",
-    "Ponta de Pedras",
-    "Tejucupapo",
-    "Atapuz",
-    "Carne de Vaca",
-    "Barra de Catuama",
-    "São Lourenço",
-    "Zona Rural",
-  ],
+  UNIDADES: {
+    PNSV: "Policlínica Nossa Senhora da Vitória (PNSV)",
+    CSM: "Centro de Saúde da Mulher (CSM)",
+    TEJUCUPAPO: "Tejucupapo",
+    PONTA: "Ponta de Pedras",
+    CRESCER: "Casa Crescer",
+    UPINHA: "Upinha",
+  },
 
-  PRIORIDADES: [
-    { id: "urgente", nome: "Urgente" },
-    { id: "prioritario", nome: "Prioritário" },
-    { id: "eletivo", nome: "Eletivo" },
-  ],
+  SERVICOS: [
+    // ---------- Consultas especializadas ----------
+    {
+      id: "angiologia", nome: "Angiologia / Vascular", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO"], idade: "18 a 120 anos",
+      medicos: [{ nome: "Miriam", dias: "Quarta" }, { nome: "Paloma", dias: "Sexta" }],
+      oferta: 280, fila: 0, tempoMedio: 0,
+    },
+    {
+      id: "clinica-medica", nome: "Clínica Médica", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO"], idade: "18 a 120 anos",
+      medicos: [
+        { nome: "Jessica", dias: "Segunda" }, { nome: "Geyhsy", dias: "Terça" },
+        { nome: "Paula", dias: "Quinta" }, { nome: "Ryan", dias: "Sexta" },
+      ],
+      oferta: 480, fila: 0, tempoMedio: 0,
+    },
+    {
+      id: "cardiologia", nome: "Cardiologia", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO", "PONTA"], idade: "18 a 120 anos",
+      medicos: [
+        { nome: "Nathalia", dias: "Terça" }, { nome: "Jose Neto", dias: "Quarta" },
+        { nome: "Marcus", dias: "Quinta" }, { nome: "Lorena", dias: "Sexta" },
+      ],
+      oferta: 420, fila: 89, tempoMedio: 10,
+    },
+    {
+      id: "cardiologia-pediatrica", nome: "Cardiologia Pediátrica", categoria: "consulta",
+      locais: ["CRESCER"], idade: "0 a 17 anos",
+      medicos: [{ nome: "Thayane", dias: "Quinta" }],
+      oferta: 120, fila: 0, tempoMedio: 0,
+    },
+    {
+      id: "cirurgia-geral", nome: "Cirurgia Geral (pequenas cirurgias)", categoria: "consulta",
+      locais: ["UPINHA", "PONTA"], idade: "18 a 120 anos",
+      medicos: [{ nome: "Diana", dias: "—", obs: "Upinha" }, { nome: "Israel", dias: "—", obs: "Upinha / Ponta de Pedras" }],
+      oferta: 100, fila: 142, tempoMedio: 45,
+    },
+    {
+      id: "dermatologia", nome: "Dermatologia", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO", "CSM"], idade: "0 a 120 anos",
+      medicos: [
+        { nome: "Renata", dias: "Terça", obs: "Única que atende pacientes de hanseníase" },
+        { nome: "Maira", dias: "Sexta" }, { nome: "Katarine", dias: "Terça" },
+      ],
+      oferta: 240, fila: 54, tempoMedio: 10,
+    },
+    {
+      id: "endocrinologia", nome: "Endocrinologia", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO", "CSM"], idade: "18 a 120 anos",
+      medicos: [
+        { nome: "Amanda", dias: "Terça e Quarta" }, { nome: "Frederico", dias: "Sexta" },
+        { nome: "Ana Eduarda", dias: "Quarta" },
+      ],
+      oferta: 360, fila: 116, tempoMedio: 15,
+    },
+    {
+      id: "endocrinologia-pediatrica", nome: "Endocrinologia Pediátrica", categoria: "consulta",
+      locais: ["PNSV"], idade: "0 a 18 anos",
+      medicos: [{ nome: "Livia", dias: "Quarta" }],
+      oferta: 80, fila: 0, tempoMedio: 0,
+    },
+    {
+      id: "gastroenterologia", nome: "Gastroenterologia / Hepatologia", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO"], idade: "17 a 120 anos",
+      medicos: [
+        { nome: "Bruno", dias: "Quinta", obs: "Também atende hepatologia" },
+        { nome: "Clarissa", dias: "Sexta" },
+      ],
+      oferta: 240, fila: 28, tempoMedio: 0,
+    },
+    {
+      id: "geriatria", nome: "Geriatria", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO"], idade: "60 a 120 anos",
+      medicos: [{ nome: "Beatriz", dias: "Segunda" }],
+      oferta: 120, fila: 0, tempoMedio: 0,
+    },
+    {
+      id: "ginecologia", nome: "Ginecologia", categoria: "consulta",
+      locais: ["CSM"], idade: "13 a 120 anos",
+      medicos: [
+        { nome: "Maisa", dias: "Segunda" }, { nome: "Ana Luisa", dias: "Terça e Quinta" },
+        { nome: "Edinilza", dias: "Quarta" }, { nome: "Leticia", dias: "Quarta" },
+      ],
+      oferta: 480, fila: 97, tempoMedio: 15,
+    },
+    {
+      id: "insercao-diu", nome: "Inserção de DIU", categoria: "consulta",
+      locais: ["CSM"], idade: "13 a 120 anos",
+      medicos: [{ nome: "Ana Luisa", dias: "Quinta" }],
+      oferta: 8, fila: 15, tempoMedio: 60,
+    },
+    {
+      id: "mastologia", nome: "Mastologia", categoria: "consulta",
+      locais: ["CSM"], idade: "13 a 120 anos",
+      medicos: [{ nome: "Wiviane", dias: "Terça" }],
+      oferta: 80, fila: 0, tempoMedio: 0,
+    },
+    {
+      id: "neonatologia", nome: "Neonatologia", categoria: "consulta",
+      locais: ["CRESCER"], idade: "0 ano",
+      medicos: [{ nome: "Marina", dias: "Quinta" }],
+      oferta: 80, fila: 0, tempoMedio: 0,
+    },
+    {
+      id: "neurocirurgia", nome: "Neurocirurgia", categoria: "consulta",
+      locais: ["PNSV"], idade: "18 a 120 anos",
+      medicos: [{ nome: "Thailane", dias: "Terça", obs: "Licença-maternidade" }],
+      oferta: null, fila: 16, tempoMedio: null,
+    },
+    {
+      id: "neurologia", nome: "Neurologia", categoria: "consulta",
+      locais: ["PNSV"], idade: "18 a 120 anos",
+      medicos: [{ nome: "Lindair", dias: "Segunda" }],
+      oferta: 90, fila: 1024, tempoMedio: 300,
+    },
+    {
+      id: "neurologia-pediatrica", nome: "Neurologia Pediátrica", categoria: "consulta",
+      locais: ["PNSV", "CRESCER"], idade: "0 a 17 anos",
+      medicos: [
+        { nome: "Waleska", dias: "Terça" }, { nome: "Lievin", dias: "Quinta" },
+        { nome: "Lindair", dias: "Sexta" }, { nome: "Windsa", dias: "Sexta" },
+      ],
+      oferta: 240, fila: 853, tempoMedio: 120,
+    },
+    {
+      id: "nutricao", nome: "Nutrição", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO", "CSM", "CRESCER"], idade: "0 a 120 anos",
+      medicos: [
+        { nome: "Simony", dias: "Quarta" }, { nome: "Elayne", dias: "Sexta" },
+        { nome: "Marcilia", dias: "Segunda, Quarta e Sexta" },
+      ],
+      oferta: 600, fila: 0, tempoMedio: 0,
+    },
+    {
+      id: "ortopedia", nome: "Ortopedia", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO"], idade: "10 a 120 anos",
+      medicos: [
+        { nome: "Ramon", dias: "Segunda" }, { nome: "Kauan", dias: "Terça e Quinta" },
+        { nome: "Clodoveu", dias: "Quarta" },
+      ],
+      oferta: 480, fila: 557, tempoMedio: 40,
+    },
+    {
+      id: "otorrinolaringologia", nome: "Otorrinolaringologia", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO"], idade: "0 a 120 anos",
+      medicos: [{ nome: "Leopoldo", dias: "Quinta" }, { nome: "Marcelo", dias: "Sexta" }],
+      oferta: 200, fila: 0, tempoMedio: 0,
+    },
+    {
+      id: "oftalmologia", nome: "Oftalmologia", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO"], idade: "0 a 120 anos",
+      medicos: [
+        { nome: "Claudomiro", dias: "Segunda" }, { nome: "Natalia", dias: "Quarta" },
+        { nome: "Thaina", dias: "Quinta" }, { nome: "Camila", dias: "Sexta" },
+      ],
+      oferta: 480, fila: 1409, tempoMedio: 90,
+    },
+    {
+      id: "pediatria", nome: "Pediatria", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO", "CRESCER"], idade: "0 a 12 anos",
+      medicos: [
+        { nome: "Rosane", dias: "Segunda" }, { nome: "Sonia", dias: "Quinta" },
+        { nome: "Sara", dias: "Quinta" }, { nome: "Thalita", dias: "Segunda e Sexta" },
+      ],
+      oferta: 500, fila: 0, tempoMedio: 0,
+    },
+    {
+      id: "pneumologia", nome: "Pneumologia", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO"], idade: "18 a 120 anos",
+      medicos: [{ nome: "Camila", dias: "Sexta" }],
+      oferta: 60, fila: 10, tempoMedio: 5,
+    },
+    {
+      id: "pneumologia-pediatrica", nome: "Pneumologia Pediátrica", categoria: "consulta",
+      locais: ["CRESCER"], idade: "0 a 16 anos",
+      medicos: [{ nome: "Amanda", dias: "Sexta", obs: "Afastada" }],
+      oferta: null, fila: 0, tempoMedio: null,
+    },
+    {
+      id: "proctologia", nome: "Proctologia", categoria: "consulta",
+      locais: ["PNSV"], idade: "18 a 120 anos",
+      medicos: [{ nome: "Patricia", dias: "Quarta" }],
+      oferta: 80, fila: 39, tempoMedio: 15,
+    },
+    {
+      id: "pre-natal-alto-risco", nome: "Pré-natal de Alto Risco", categoria: "consulta",
+      locais: ["CSM"], idade: "12 a 120 anos",
+      medicos: [{ nome: "Ana Maria", dias: "Sexta" }, { nome: "Mayara", dias: "Segunda" }],
+      oferta: 60, fila: 5, tempoMedio: 5,
+    },
+    {
+      id: "psiquiatria", nome: "Psiquiatria", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO"], idade: "18 a 120 anos",
+      medicos: [
+        { nome: "Aline", dias: "Segunda" }, { nome: "Gabrielle", dias: "Segunda e Terça" },
+        { nome: "Polyanna", dias: "Quinta" },
+      ],
+      oferta: 480, fila: 1058, tempoMedio: 75,
+    },
+    {
+      id: "psiquiatria-pediatrica", nome: "Psiquiatria Pediátrica", categoria: "consulta",
+      locais: ["PNSV", "CRESCER"], idade: "0 a 17 anos",
+      medicos: [
+        { nome: "Gabriela", dias: "Segunda" }, { nome: "Rodrigo", dias: "Terça e Quarta" },
+        { nome: "Jose Augusto", dias: "Segunda" },
+      ],
+      oferta: 240, fila: 0, tempoMedio: 0,
+    },
+    {
+      id: "reumatologia", nome: "Reumatologia", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO"], idade: "18 a 120 anos",
+      medicos: [{ nome: "Ana Valeska", dias: "Sexta" }, { nome: "Clara", dias: "Sexta" }],
+      oferta: 200, fila: 99, tempoMedio: 15,
+    },
+    {
+      id: "urologia", nome: "Urologia", categoria: "consulta",
+      locais: ["PNSV", "TEJUCUPAPO"], idade: "8 a 120 anos",
+      medicos: [{ nome: "Marfran", dias: "Quinta" }],
+      oferta: 100, fila: 309, tempoMedio: 90,
+    },
+    {
+      id: "uroginecologia", nome: "Uroginecologia", categoria: "consulta",
+      locais: ["CSM"], idade: "13 a 120 anos",
+      medicos: [{ nome: "Ana Luisa", dias: "Quinta" }],
+      oferta: 30, fila: 0, tempoMedio: 0,
+    },
 
-  ESPECIALIDADES: [
+    // ---------- Exames ----------
     {
-      id: "cardiologia",
-      nome: "Cardiologia",
-      icone: "❤",
-      especialistas: [
-        { nome: "Dr(a). Especialista 01", local: "Policlínica Municipal", dias: "Seg e Qua", horario: "07:00 – 11:00" },
-        { nome: "Dr(a). Especialista 02", local: "Policlínica Municipal", dias: "Sex", horario: "13:00 – 17:00" },
-      ],
-      fila: {
-        "Centro": [4, 18, 42], "Nova Goiana": [2, 9, 25], "Ponta de Pedras": [1, 6, 14],
-        "Tejucupapo": [1, 5, 11], "Atapuz": [0, 3, 8], "Carne de Vaca": [0, 2, 6],
-        "Barra de Catuama": [1, 2, 5], "São Lourenço": [0, 4, 9], "Zona Rural": [2, 7, 16],
-      },
+      id: "colonoscopia", nome: "Colonoscopia", categoria: "exame",
+      locais: ["UPINHA"], idade: "18 a 120 anos",
+      medicos: [{ nome: "Marcelo", dias: "2x no mês" }, { nome: "Daniel", dias: "Quarta, de 15 em 15 dias" }],
+      oferta: 80, fila: 198, tempoMedio: 90,
     },
     {
-      id: "ortopedia",
-      nome: "Ortopedia",
-      icone: "🦴",
-      especialistas: [
-        { nome: "Dr(a). Especialista 03", local: "Policlínica Municipal", dias: "Ter e Qui", horario: "07:00 – 12:00" },
-        { nome: "Dr(a). Especialista 04", local: "Unidade de Saúde Centro", dias: "Seg", horario: "13:00 – 17:00" },
-      ],
-      fila: {
-        "Centro": [3, 22, 61], "Nova Goiana": [1, 12, 33], "Ponta de Pedras": [1, 7, 19],
-        "Tejucupapo": [0, 6, 15], "Atapuz": [0, 4, 10], "Carne de Vaca": [0, 3, 7],
-        "Barra de Catuama": [0, 2, 6], "São Lourenço": [1, 5, 13], "Zona Rural": [1, 9, 24],
-      },
+      id: "ecocardiograma", nome: "Ecocardiograma", categoria: "exame",
+      locais: ["UPINHA"], idade: "2 a 120 anos",
+      medicos: [{ nome: "Jonathas", dias: "Terça" }],
+      oferta: 80, fila: 838, tempoMedio: 300,
     },
     {
-      id: "oftalmologia",
-      nome: "Oftalmologia",
-      icone: "👁",
-      especialistas: [
-        { nome: "Dr(a). Especialista 05", local: "Centro de Especialidades", dias: "Seg a Qua", horario: "08:00 – 12:00" },
+      id: "endoscopia", nome: "Endoscopia", categoria: "exame",
+      locais: ["UPINHA", "PONTA"], idade: "16 a 120 anos",
+      medicos: [
+        { nome: "Ricardo", dias: "Terça, de 15 em 15 dias" }, { nome: "Henrique", dias: "Quinta" },
+        { nome: "Silvio", dias: "Quarta" },
       ],
-      fila: {
-        "Centro": [2, 25, 88], "Nova Goiana": [1, 14, 47], "Ponta de Pedras": [0, 8, 26],
-        "Tejucupapo": [0, 7, 21], "Atapuz": [0, 4, 13], "Carne de Vaca": [0, 3, 9],
-        "Barra de Catuama": [0, 2, 8], "São Lourenço": [1, 6, 18], "Zona Rural": [1, 11, 35],
-      },
+      oferta: 240, fila: 27, tempoMedio: 10,
     },
     {
-      id: "neurologia",
-      nome: "Neurologia",
-      icone: "🧠",
-      especialistas: [
-        { nome: "Dr(a). Especialista 06", local: "Centro de Especialidades", dias: "Qui", horario: "07:00 – 13:00" },
-      ],
-      fila: {
-        "Centro": [3, 11, 29], "Nova Goiana": [1, 6, 15], "Ponta de Pedras": [1, 3, 8],
-        "Tejucupapo": [0, 3, 7], "Atapuz": [0, 2, 5], "Carne de Vaca": [0, 1, 3],
-        "Barra de Catuama": [0, 1, 3], "São Lourenço": [0, 2, 6], "Zona Rural": [1, 4, 11],
-      },
+      id: "exames-oftalmologicos", nome: "Exames Oftalmológicos", categoria: "exame",
+      locais: ["PNSV"], idade: "0 a 120 anos",
+      medicos: [{ nome: "Claudomiro", dias: "Quinta" }],
+      oferta: 200, fila: 755, tempoMedio: 120,
+      obs: "Exames ofertados: biometria, campimetria, curva, gonioscopia, mapeamento de retina, paquimetria, retinografia, topografia e ultrassonografia do globo ocular.",
     },
     {
-      id: "dermatologia",
-      nome: "Dermatologia",
-      icone: "✋",
-      especialistas: [
-        { nome: "Dr(a). Especialista 07", local: "Policlínica Municipal", dias: "Ter", horario: "13:00 – 17:00" },
+      id: "usg", nome: "Ultrassonografia (USG)", categoria: "exame",
+      locais: ["UPINHA", "CSM", "PNSV", "TEJUCUPAPO", "CRESCER", "PONTA"], idade: "0 a 120 anos",
+      medicos: [
+        { nome: "Carol", dias: "Quarta" }, { nome: "Pierre", dias: "Terça" },
+        { nome: "Mauro", dias: "Quarta" }, { nome: "Sandrinerio", dias: "Quinta" },
+        { nome: "Henderson", dias: "Terça" }, { nome: "Matheus", dias: "—", obs: "PSF" },
+        { nome: "Gildomar", dias: "Sexta", obs: "Melões" }, { nome: "Anyelle", dias: "Segunda e Sexta" },
+        { nome: "Livia", dias: "Terça" },
       ],
-      fila: {
-        "Centro": [0, 8, 34], "Nova Goiana": [0, 5, 18], "Ponta de Pedras": [0, 3, 12],
-        "Tejucupapo": [0, 2, 9], "Atapuz": [0, 2, 6], "Carne de Vaca": [0, 1, 5],
-        "Barra de Catuama": [0, 1, 4], "São Lourenço": [0, 2, 7], "Zona Rural": [0, 4, 13],
-      },
-    },
-    {
-      id: "ginecologia",
-      nome: "Ginecologia e Obstetrícia",
-      icone: "♀",
-      especialistas: [
-        { nome: "Dr(a). Especialista 08", local: "Unidade de Saúde Centro", dias: "Seg a Sex", horario: "07:00 – 11:00" },
-        { nome: "Dr(a). Especialista 09", local: "Policlínica Municipal", dias: "Qua", horario: "13:00 – 17:00" },
-      ],
-      fila: {
-        "Centro": [2, 14, 30], "Nova Goiana": [1, 8, 17], "Ponta de Pedras": [1, 5, 10],
-        "Tejucupapo": [1, 4, 9], "Atapuz": [0, 3, 6], "Carne de Vaca": [0, 2, 5],
-        "Barra de Catuama": [0, 2, 4], "São Lourenço": [0, 3, 8], "Zona Rural": [1, 6, 14],
-      },
-    },
-    {
-      id: "urologia",
-      nome: "Urologia",
-      icone: "⚕",
-      especialistas: [
-        { nome: "Dr(a). Especialista 10", local: "Centro de Especialidades", dias: "Sex", horario: "07:00 – 12:00" },
-      ],
-      fila: {
-        "Centro": [1, 9, 27], "Nova Goiana": [0, 5, 14], "Ponta de Pedras": [0, 3, 8],
-        "Tejucupapo": [0, 2, 7], "Atapuz": [0, 1, 5], "Carne de Vaca": [0, 1, 3],
-        "Barra de Catuama": [0, 1, 3], "São Lourenço": [0, 2, 6], "Zona Rural": [1, 4, 10],
-      },
-    },
-    {
-      id: "endocrinologia",
-      nome: "Endocrinologia",
-      icone: "⚖",
-      especialistas: [
-        { nome: "Dr(a). Especialista 11", local: "Policlínica Municipal", dias: "Qua", horario: "07:00 – 12:00" },
-      ],
-      fila: {
-        "Centro": [1, 10, 36], "Nova Goiana": [0, 6, 19], "Ponta de Pedras": [0, 3, 10],
-        "Tejucupapo": [0, 3, 9], "Atapuz": [0, 2, 6], "Carne de Vaca": [0, 1, 4],
-        "Barra de Catuama": [0, 1, 4], "São Lourenço": [0, 2, 8], "Zona Rural": [0, 5, 15],
-      },
-    },
-    {
-      id: "otorrino",
-      nome: "Otorrinolaringologia",
-      icone: "👂",
-      especialistas: [
-        { nome: "Dr(a). Especialista 12", local: "Centro de Especialidades", dias: "Ter", horario: "07:00 – 11:00" },
-      ],
-      fila: {
-        "Centro": [0, 7, 24], "Nova Goiana": [0, 4, 13], "Ponta de Pedras": [0, 2, 7],
-        "Tejucupapo": [0, 2, 6], "Atapuz": [0, 1, 4], "Carne de Vaca": [0, 1, 3],
-        "Barra de Catuama": [0, 1, 2], "São Lourenço": [0, 1, 5], "Zona Rural": [0, 3, 9],
-      },
-    },
-    {
-      id: "psiquiatria",
-      nome: "Psiquiatria",
-      icone: "☯",
-      especialistas: [
-        { nome: "Dr(a). Especialista 13", local: "CAPS Goiana", dias: "Seg e Qui", horario: "08:00 – 12:00" },
-      ],
-      fila: {
-        "Centro": [2, 12, 20], "Nova Goiana": [1, 7, 11], "Ponta de Pedras": [0, 4, 6],
-        "Tejucupapo": [0, 3, 5], "Atapuz": [0, 2, 4], "Carne de Vaca": [0, 1, 3],
-        "Barra de Catuama": [0, 1, 2], "São Lourenço": [0, 2, 5], "Zona Rural": [1, 4, 8],
-      },
-    },
-    {
-      id: "pediatria",
-      nome: "Pediatria",
-      icone: "☺",
-      especialistas: [
-        { nome: "Dr(a). Especialista 14", local: "Unidade de Saúde Centro", dias: "Seg a Sex", horario: "13:00 – 17:00" },
-      ],
-      fila: {
-        "Centro": [1, 6, 15], "Nova Goiana": [1, 4, 9], "Ponta de Pedras": [0, 2, 5],
-        "Tejucupapo": [0, 2, 5], "Atapuz": [0, 1, 3], "Carne de Vaca": [0, 1, 2],
-        "Barra de Catuama": [0, 1, 2], "São Lourenço": [0, 1, 4], "Zona Rural": [0, 3, 7],
-      },
-    },
-    {
-      id: "gastro",
-      nome: "Gastroenterologia",
-      icone: "✚",
-      especialistas: [
-        { nome: "Dr(a). Especialista 15", local: "Centro de Especialidades", dias: "Qua", horario: "13:00 – 17:00" },
-      ],
-      fila: {
-        "Centro": [1, 8, 22], "Nova Goiana": [0, 4, 12], "Ponta de Pedras": [0, 2, 7],
-        "Tejucupapo": [0, 2, 6], "Atapuz": [0, 1, 4], "Carne de Vaca": [0, 1, 2],
-        "Barra de Catuama": [0, 1, 2], "São Lourenço": [0, 2, 5], "Zona Rural": [0, 3, 9],
-      },
+      oferta: 1440, fila: 7473, tempoMedio: 150,
+      obs: "Com Doppler: carótidas, venoso e arterial de MMII e MMSS, abdome total, bolsa escrotal, obstétrica, tireoide, mama e transvaginal. Sem Doppler: abdome total, abdome superior, aparelho urinário, articulação, bolsa escrotal, mama/axila, obstétrica, obstétrica morfológica, parede abdominal, partes moles, próstata, tireoide, pélvica e transvaginal.",
     },
   ],
 };

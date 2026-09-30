@@ -4,30 +4,28 @@ Sistema web de consulta da fila de espera da regulação da Secretaria Municipal
 
 ## Funcionalidades
 
-- **Painel geral**: total de pacientes na fila, divisão por prioridade (urgente, prioritário, eletivo), fila por especialidade e por localidade.
-- **Dashboard por especialidade**: fila de pacientes, localidades de origem, especialistas, local, dias e horário de atendimento, além das últimas atualizações.
+- **Painel geral**: pacientes aguardando consulta e exame, oferta mensal, serviços com espera longa, gráficos da fila por serviço, busca por especialidade/exame/médico e filtro por unidade.
+- **Dashboard por especialidade ou exame**: fila de espera, tempo médio para agendamento, oferta média mensal, relação fila ÷ oferta, agenda semanal dos médicos, unidades de atendimento, faixa etária e observações.
 - **Atualizar cadastro** (menu):
-  - *Fila de espera*: aumentar, diminuir ou definir o número exato de pacientes por especialidade, localidade e prioridade. Os dashboards mudam na hora.
-  - *Especialistas e horários*: incluir, editar e remover profissionais; criar novas especialidades.
-  - *Dados e backup*: exportar/importar os dados (JSON), exportar a fila em CSV e restaurar a base.
-- **Histórico de atualizações**: registra data, variação, motivo e responsável de cada alteração.
+  - *Fila de espera*: aumentar, diminuir ou definir a fila e o tempo médio de cada serviço. Os dashboards mudam na hora.
+  - *Médicos, unidades e oferta*: incluir, editar e remover médicos e dias de atendimento; alterar unidades, faixa etária, oferta mensal e observações; criar novos serviços.
+  - *Dados e backup*: exportar/importar os dados (JSON), exportar planilha (CSV) e restaurar a lista oficial.
+- **Histórico de atualizações**: registra data, fila antes/depois, tempo médio, motivo e responsável.
+
+Situação da fila (pelo tempo médio para agendamento): até 15 dias = espera curta; 16 a 60 = moderada; acima de 60 = longa; sem oferta = atendimento suspenso.
 
 ## Estrutura
 
 ```
 index.html        página única (rotas via #/...)
 css/style.css     layout e paleta de cores (variáveis no topo do arquivo)
-js/data.js        DADOS BASE: especialidades, localidades, especialistas e fila
+js/data.js        DADOS BASE: unidades e serviços da Lista de especialidades
 js/app.js         lógica dos dashboards e do menu Atualizar cadastro
 ```
 
-## Carregar a lista oficial de especialidades
+## Dados
 
-O arquivo `js/data.js` está com **dados de exemplo**. Para usar os dados oficiais:
-
-1. Edite `LOCALIDADES` e `ESPECIALIDADES` em `js/data.js` com a Lista de especialidades.
-   Em cada especialidade, `fila["Localidade"] = [urgente, prioritário, eletivo]`.
-2. Troque `exemplo: true` para `exemplo: false` (remove o aviso amarelo) e atualize `versao`.
+`js/data.js` foi preenchido a partir da *Lista de especialidades* (rede própria do município de Goiana que pode ser agendada pelo SISREG): 31 especialidades e 5 exames, com unidades, faixa etária, médicos e dias de atendimento, oferta média mensal, fila de espera e tempo médio para agendamento. Valores "---" do documento aparecem como "não informado".
 
 ## Onde ficam as atualizações
 
